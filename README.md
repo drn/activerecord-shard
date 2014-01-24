@@ -3,6 +3,10 @@
 Easily interact with multiple database tables while leveraging a single
 ActiveRecord::Base model.
 
+### Disclaimer
+
+This is in a very early alpha - use at your own risk.
+
 ### Usage
 
     class Car
