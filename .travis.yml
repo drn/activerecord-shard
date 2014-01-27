@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.0
+install: ./build.sh
+before_script:
+  - mkdir log
+  - cp spec/database.yml.sample spec/database.yml
+  - mysql -e 'create database activerecord_dynamic_test'
+  - gem install rspec mysql2
+script: rspec
+notifications:
+  email:
+    on_success: never
+    on_failure: change
