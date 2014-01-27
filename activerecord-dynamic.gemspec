@@ -15,4 +15,8 @@ Gem::Specification.new do |s|
 
   s.files       = Dir.glob("{lib}/**/*") + %w(README.md)
   s.require_paths = ['lib']
+
+  s.add_runtime_dependency 'activerecord', '>= 3.0'
+  s.add_development_dependency 'rake', '10.1.1'
+  s.add_development_dependency 'pry-remote', '0.1.7'
 end
