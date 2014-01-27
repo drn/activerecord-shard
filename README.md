@@ -3,6 +3,11 @@
 Easily interact with multiple database tables while leveraging a single
 ActiveRecord::Base model.
 
+* * *
+
+ [![Gem Version](https://badge.fury.io/rb/activerecord-dynamic.png)](http://badge.fury.io/rb/activerecord-dynamic)
+[![Build Status](https://travis-ci.org/darrenli/activerecord-dynamic.png?branch=master)](https://travis-ci.org/darrenli/activerecord-dynamic)
+
 ### Disclaimer
 
 This is in a very early alpha - use at your own risk.
