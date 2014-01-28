@@ -36,4 +36,8 @@ describe ActiveRecord::Dynamic do
     expect(schema.exists?(fullname)).to eq(false)
   end
 
+  after(:all) do
+    Object.send(:remove_const, :DynamicKlass)
+  end
+
 end
