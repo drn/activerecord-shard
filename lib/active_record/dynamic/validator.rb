@@ -16,7 +16,7 @@ module ActiveRecord::Dynamic
       end
 
       def validate_setup!(klass)
-        tablename = klass.instance_variable_get(:tablename)
+        tablename = klass.instance_variable_get(:@tablename)
         if tablename.blank?
           raise ActiveRecord::Dynamic::UnpreparedError.new(
             "Table name must be established via #{klass}.use(..) before"\

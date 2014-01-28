@@ -2,6 +2,9 @@ require_relative '../spec_helper.rb'
 
 describe ActiveRecord::Dynamic do
 
+  let(:core){ ActiveRecord::Dynamic::Core }
+  let(:schema){ ActiveRecord::Dynamic::Schema }
+
   before(:all) do
     DynamicKlass = Class.new do
       include ActiveRecord::Dynamic
@@ -17,8 +20,20 @@ describe ActiveRecord::Dynamic do
     end
   end
 
-  it 'should work' do
-    DynamicKlass.use('table1')
+  before(:each) do
+    core.each(DynamicKlass) do
+      schema.teardown(DynamicKlass)
+    end
+  end
+
+  it 'should setup and teardown' do
+    tablename = 'tablename'
+    fullname = "#{tablename}_#{schema.suffix(DynamicKlass)}"
+    expect(schema.exists?(fullname)).to eq(false)
+    DynamicKlass.use(tablename)
+    expect(schema.exists?(fullname)).to eq(true)
+    schema.teardown(DynamicKlass)
+    expect(schema.exists?(fullname)).to eq(false)
   end
 
 end

@@ -22,14 +22,14 @@ module ActiveRecord::Dynamic
     #
     #
     def tables
-      ActiveRecord::Dynamic::Core.tables(self)
+      ActiveRecord::Dynamic::Schema.tables(self)
     end
 
     #
     # @yield
     #
     def each
-      ActiveRecord::Dynamic::Core.each(self, &block)
+      ActiveRecord::Dynamic::Schema.each(self, &block)
     end
 
     protected

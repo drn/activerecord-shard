@@ -8,44 +8,75 @@ module ActiveRecord::Dynamic
       # @param klass [Class]
       #
       def setup(klass)
-        tablename = self.tablename(klass)
-        return if ActiveRecord::Dynamic::Core.exists?(tablename)
-        self.connection.create_table(tablename) do |table|
+        fullname = self.fullname(klass)
+        return if self.exists?(fullname)
+        self.connection.create_table(fullname) do |table|
           self.schema(klass).setup(table)
           table.timestamps
         end
         self.schema(klass).send(:indexes).each do |index|
           case index
           when Symbol
-            connection.add_index(tablename, index)
+            connection.add_index(fullname, index)
           when Hash
             index_config = index.first
             index = index_config[0]
             options = index_config[1]
-            Self.connection.add_index(tablename, index, options)
+            Self.connection.add_index(fullname, index, options)
           end
         end
       end
 
       def teardown(klass)
-        tablename = self.tablename(klass)
-        return if !ActiveRecord::Dynamic::Core.exists?(tablename)
-        ActiveRecord::Base.connection.drop_table(tablename)
+        fullname = self.fullname(klass)
+        return if !self.exists?(fullname)
+        self.connection.drop_table(fullname)
       end
 
-      protected
+      def tables(klass)
+        self.connection.select_all("SHOW tables LIKE '%_#{self.suffix(klass)}'")
+                       .map{|r| r.first.last.gsub(self.suffix_regex(klass),'')}
+      end
 
-        def schema(klass)
-          klass.const_get('DynamicSchema')
-        end
+      #
+      # Given the input tablename, returns true if it exists in the database.
+      #
+      # @param tablename [String] tablename to check existence for
+      #
+      # @return [Boolean] true if the input tablename exists
+      #
+      def exists?(tablename)
+        result = self.connection.execute("SHOW tables LIKE '#{tablename}'")
+        result.count == 1
+      end
 
-        def tablename(klass)
-          klass.instance_variable_get(:@tablename)
-        end
+      def schema(klass)
+        klass.const_get('DynamicSchema')
+      end
 
-        def connection
-          ActiveRecord::Base.connection
-        end
+      def tablename(klass)
+        klass.instance_variable_get(:@tablename)
+      end
+
+      def suffix(klass)
+        klass.name.underscore.pluralize
+      end
+
+      def suffix_regex(klass)
+        Regexp.new("_#{klass.name.underscore.pluralize}$")
+      end
+
+      def fullname(klass)
+        "#{self.tablename(klass)}_#{self.suffix(klass)}"
+      end
+
+      #
+      # @return [ActiveRecord::ConnectionAdapters::*] database connection
+      #   adapter
+      #
+      def connection
+        ActiveRecord::Base.connection
+      end
 
     end
   end
