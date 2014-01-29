@@ -3,7 +3,7 @@ module ActiveRecord::Dynamic
     class << self
 
       def validate_configuration!(klass)
-        unless (!!klass.const_get('Dynamic') rescue false)
+        unless (!!klass.const_get('DynamicRecord') rescue false)
           raise ActiveRecord::Dynamic::InvalidUsageError.new(
             "#{klass}::Dynamic < ActiveRecord::Base is expected to exist"
           )

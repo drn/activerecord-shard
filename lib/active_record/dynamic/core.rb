@@ -5,7 +5,7 @@ module ActiveRecord::Dynamic
       def establish_delegate(klass, tablename)
         klass.instance_variable_set(:@tablename, tablename)
         fullname = ActiveRecord::Dynamic::Schema.fullname(klass)
-        klass.const_get('Dynamic').table_name = fullname
+        klass.const_get('DynamicRecord').table_name = fullname
       end
 
       def each(klass)

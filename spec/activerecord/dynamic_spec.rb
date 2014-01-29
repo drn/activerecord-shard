@@ -6,9 +6,9 @@ describe ActiveRecord::Dynamic do
   let(:schema){ ActiveRecord::Dynamic::Schema }
 
   before(:all) do
-    DynamicKlass = Class.new do
+    class DynamicKlass
       include ActiveRecord::Dynamic
-      class Dynamic < ActiveRecord::Base
+      class DynamicRecord < ActiveRecord::Base
 
       end
       module DynamicSchema
