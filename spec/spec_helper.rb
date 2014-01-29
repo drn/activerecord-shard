@@ -32,6 +32,24 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   #config.order = 'random'
+
+  config.before(:each) do
+    class DynamicKlass
+      include ActiveRecord::Dynamic
+      class DynamicRecord < ActiveRecord::Base; end
+      module DynamicSchema
+        class << self
+          def setup(table); end
+          def indexes; [] end
+        end
+      end
+    end
+  end
+
+  config.after(:each) do
+    Object.send(:remove_const, :DynamicKlass)
+  end
+
 end
 
 

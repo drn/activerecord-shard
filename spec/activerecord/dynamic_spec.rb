@@ -5,27 +5,6 @@ describe ActiveRecord::Dynamic do
   let(:core){ ActiveRecord::Dynamic::Core }
   let(:schema){ ActiveRecord::Dynamic::Schema }
 
-  before(:all) do
-    class DynamicKlass
-      include ActiveRecord::Dynamic
-      class DynamicRecord < ActiveRecord::Base
-
-      end
-      module DynamicSchema
-        class << self
-          def setup(table); end
-          def indexes; [] end
-        end
-      end
-    end
-  end
-
-  before(:each) do
-    core.each(DynamicKlass) do
-      schema.teardown(DynamicKlass)
-    end
-  end
-
   it 'should setup and teardown' do
     tablename = 'tablename'
     fullname = "#{tablename}_#{schema.suffix(DynamicKlass)}"
@@ -34,10 +13,6 @@ describe ActiveRecord::Dynamic do
     expect(schema.exists?(fullname)).to eq(true)
     schema.teardown(DynamicKlass)
     expect(schema.exists?(fullname)).to eq(false)
-  end
-
-  after(:all) do
-    Object.send(:remove_const, :DynamicKlass)
   end
 
 end

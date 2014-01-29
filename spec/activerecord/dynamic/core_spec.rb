@@ -5,19 +5,6 @@ describe ActiveRecord::Dynamic::Core do
   let(:core){ ActiveRecord::Dynamic::Core }
   let(:schema){ ActiveRecord::Dynamic::Schema }
 
-  before(:each) do
-    class DynamicKlass
-      include ActiveRecord::Dynamic
-      class DynamicRecord < ActiveRecord::Base; end
-      module DynamicSchema
-        class << self
-          def setup(table); end
-          def indexes; [] end
-        end
-      end
-    end
-  end
-
   context :establish_delegate do
     it 'should establish delegate' do
       tablename = 'tablename'
@@ -49,10 +36,6 @@ describe ActiveRecord::Dynamic::Core do
         i += 1
       end
     end
-  end
-
-  after(:each) do
-    Object.send(:remove_const, :DynamicKlass)
   end
 
 end
