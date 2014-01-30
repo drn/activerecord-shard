@@ -42,7 +42,7 @@ module ActiveRecord::Dynamic
       #
       def method_missing(sym, *args, &block)
         ActiveRecord::Dynamic::Validator.validate_setup!(self)
-        self.const_get('Dynamic').send(sym, *args, &block)
+        self.const_get('DynamicRecord').send(sym, *args, &block)
       end
 
   end
