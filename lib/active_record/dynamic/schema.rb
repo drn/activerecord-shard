@@ -50,22 +50,37 @@ module ActiveRecord::Dynamic
         result.count == 1
       end
 
+      #
+      # @return [*::DynamicSchema] schema module
+      #
       def schema(klass)
         klass.const_get('DynamicSchema')
       end
 
+      #
+      # @return [String] current tablename of the dynamic model
+      #
       def tablename(klass)
         klass.instance_variable_get(:@tablename)
       end
 
+      #
+      # @return [String] database tablename suffix for the given model
+      #
       def suffix(klass)
         klass.name.underscore.pluralize
       end
 
+      #
+      # @return [Regexp] identifying regex of given dynamic model's tablename
+      #
       def suffix_regex(klass)
         Regexp.new("_#{klass.name.underscore.pluralize}$")
       end
 
+      #
+      # @return [String] name of the currently select dynamic table
+      #
       def fullname(klass)
         "#{self.tablename(klass)}_#{self.suffix(klass)}"
       end
